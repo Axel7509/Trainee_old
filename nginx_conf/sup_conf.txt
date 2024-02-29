@@ -1,0 +1,119 @@
+log_format custom_log 'my_log = $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for" "$proxy_host:$proxy_port" upstream: $upstream_addr';
+
+upstream backend 
+{
+	least_conn;
+	server localhost:8001 weight=1;
+	server localhost:8002 weight=2;
+}
+
+
+server {
+
+        root /var/www/sorok-arterg.servebeer.com/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name sorok-arterg.servebeer.com www.sorok-arterg.servebeer.com;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+	location /secondpage{
+                index secondpage.html;
+		try_files /secondpage.html $uri/ =404;
+        }
+
+	location /music {
+	    alias /var/www/sorok-arterg.servebeer.com/music/;
+	    add_header Content-Disposition 'attachment';
+	}
+
+	location /secondserver {
+	        proxy_pass http://localhost:5050;
+	}
+
+	location /info.php {
+		proxy_pass http://localhost:5051;
+	}
+
+	location /redblue {
+            proxy_pass http://backend;
+
+            access_log /var/log/nginx/access.log custom_log;
+	}
+	
+	location ~ ^/image2/(.*\.png)$ {
+           alias /var/www/sorok-arterg.servebeer.com/images/$1;
+        }
+
+	location ~ ^/image1/(.*\.jpg)$ {
+           alias /var/www/sorok-arterg.servebeer.com/images/$1; 
+	   image_filter rotate 180;
+        }
+
+	location /cpu_load {
+	   index cpu_load.html;
+           try_files /cpu_load.html $uri/ =404;
+	}
+
+	location /error {
+	    deny all;
+	}
+		
+	    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+	    listen 443 ssl; # managed by Certbot
+	    ssl_certificate /etc/letsencrypt/live/sorok-arterg.servebeer.com/fullchain.pem; # managed by Certbot
+	    ssl_certificate_key /etc/letsencrypt/live/sorok-arterg.servebeer.com/privkey.pem; # managed by Certbot
+	    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+	    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = sorok-arterg.servebeer.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+        server_name sorok-arterg.servebeer.com www.sorok-arterg.servebeer.com;
+    return 404; # managed by Certbot
+}
+
+server {
+    listen 5050;
+    server_name sorok-arterg.servebeer.com;
+	
+    location /{
+        resolver 172.31.0.2;
+        proxy_pass http://www.google.com;
+    }
+}
+
+server {
+        listen 8001;
+        server_name back_1;
+
+	root /var/www/sorok-arterg.servebeer.com/html;
+	index red.html;
+
+	location / {
+                try_files /red.html $uri/ =404;
+        }
+
+}
+
+server {
+        listen 8002;
+        server_name back_2;
+
+        root /var/www/sorok-arterg.servebeer.com/html;
+        index red.html;
+
+        location / {
+                try_files /blue.html $uri/ =404;
+        }
+
+}
