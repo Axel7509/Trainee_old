@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+private_server_ip="10.0.0.161"
+private_server_username="ubuntu"
+private_server_ssh_key="../keys/Trainee_key_aws.pem"
+
+
+ssh -i "$private_server_ssh_key" "$private_server_username@$private_server_ip" "sudo apt update"
+echo "server updated"
+
+ssh -i "$private_server_ssh_key" "$private_server_username@$private_server_ip"
+
