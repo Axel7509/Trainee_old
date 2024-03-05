@@ -14,6 +14,11 @@ if [ "$os" == "Linux" ]; then
 elif [ "$os" == "Darwin" ]; then
   # Установка на macOS (используя Homebrew)
   brew install python3
+elif [[ "$os" == "MINGW"* ]]; then
+  # Установка на Windows (используя msiexec)
+  curl "https://awscli.amazonaws.com/AWSCLIV2.msi" -o "AWSCLIV2.msi"
+  msiexec.exe /i "AWSCLIV2.msi" /quiet
+  rm "AWSCLIV2.msi"
 fi
 
 pip3 install awscli --upgrade --user
