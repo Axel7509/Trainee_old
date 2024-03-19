@@ -1,0 +1,18 @@
+version: '3'
+services:
+  nginx-bot:
+    image: axel76/rel_nginx:v10
+    networks:
+      - appnet
+    ports:
+      - 80:80
+      - 443:443
+    container_name: nginx-bot
+  apache-info-container:
+    networks:
+      - appnet
+    image: axel76/rel_apache:v03
+    container_name: apache-info-container
+
+networks:
+  appnet: {}

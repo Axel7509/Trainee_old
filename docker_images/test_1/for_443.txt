@@ -1,0 +1,31 @@
+server {
+	listen 443 ssl;
+
+	ssl_certificate /etc/nginx/certs/fullchain.pem;
+        ssl_certificate_key /etc/nginx/certs/privkey.pem;
+        include /etc/nginx/certs/options-ssl-nginx.conf; 
+        ssl_dhparam /etc/nginx/certs/ssl-dhparams.pem; 
+
+        root /var/www/amogus/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name amogus.zapto.org www.amogus.zapto.org;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+        location /secondpage{
+                index secondpage.html;
+		try_files /secondpage.html $uri/ =404;
+        }
+
+	location /music {
+	    alias /var/www/amogus/music/;
+	    add_header Content-Disposition 'attachment';
+	}
+
+        location ~ ^/image2/(.*\.png)$ {
+           alias /var/www/amogus/images/$1;
+        }
+}
