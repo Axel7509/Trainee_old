@@ -5,3 +5,6 @@
 *.tfvars
 .terraform.lock.hcl
 terraform.rc
+
+val.py
+**/val.py
