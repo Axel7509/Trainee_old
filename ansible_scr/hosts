@@ -1,2 +1,5 @@
-[my_servers]
-server1 ansible_host=54.147.120.157 ansible_ssh_user=ubuntu ansible_ssh_private_key_file=/home/arterg/Documents/Trainee_key_aws.pem
+[ubuntu]
+server1 
+
+[amazon]
+server2 

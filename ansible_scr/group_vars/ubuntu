@@ -1,0 +1,3 @@
+ansible_host: 52.205.105.241 
+ansible_ssh_user: ubuntu 
+ansible_ssh_private_key_file: /home/arterg/Documents/Trainee_key_aws.pem
