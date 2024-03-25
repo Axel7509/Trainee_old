@@ -1,0 +1,26 @@
+---
+- name: Build image nginx
+  docker_image:
+    build:
+      path: home/ubuntu/Trainee/docker_images/test_1
+    name: axel76/rel_nginx
+    tag: v10
+    source: build
+
+- name: Build image apache
+  docker_image:
+    build:
+      path: home/ubuntu/Trainee/docker_images/apache
+    name: axel76/rel_apache
+    tag: v03
+    source: build
+
+- name: Build test image
+  community.docker.docker_image_build:
+    name: test:v01
+    path: home/ubuntu/Trainee/docker_images/live_nginx
+    dockerfile: Dockerfile
+
+- name: Run docker-compose up
+  docker_compose:
+    project_src: home/ubuntu/Trainee/docker_images

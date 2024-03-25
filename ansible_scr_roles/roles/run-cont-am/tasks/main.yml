@@ -1,0 +1,28 @@
+---
+- name: Build image nginx
+  docker_image:
+    build:
+      path: home/ec2-user/Trainee/docker_images/test_1
+    name: axel76/rel_nginx
+    tag: v10
+    source: build
+
+- name: Build image apache
+  docker_image:
+    build:
+      path: home/ec2-user/Trainee/docker_images/apache
+    name: axel76/rel_apache
+    tag: v03
+    source: build
+
+- name: Build test image
+  community.docker.docker_image_build:
+    name: test:v01
+    path: home/ec2-user/Trainee/docker_images/live_nginx
+    dockerfile: Dockerfile
+
+- name: Запуск docker-compose up
+  command: >
+    docker-compose up -d
+  args:
+    chdir: home/ec2-user/Trainee/docker_images

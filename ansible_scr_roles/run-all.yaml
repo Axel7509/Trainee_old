@@ -1,0 +1,10 @@
+- name: Install Docker on Amazon Linux
+  hosts: all
+  gather_facts: true
+  become: true
+  roles:
+    - install-git
+    - { role: install-docker-ub, when: ansible_distribution == 'Ubuntu' }
+    - { role: install-docker-am, when: ansible_distribution == 'Amazon' }
+    - { role: run-cont-ub, when: ansible_distribution == 'Ubuntu' }
+    - { role: run-cont-am, when: ansible_distribution == 'Amazon' }

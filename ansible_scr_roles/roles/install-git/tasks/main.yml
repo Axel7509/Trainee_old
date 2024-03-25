@@ -1,0 +1,29 @@
+- name: Installing Git on Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  apt:
+    name: git
+    state: present
+
+- name: Installing Git on Amazon Linux
+  when: ansible_distribution == 'Amazon'
+  yum:
+    name: git
+    state: present
+
+- name: Clone or update repository for Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  git:
+    repo: https://github.com/Axel7509/Trainee.git
+    dest: home/ubuntu/Trainee
+    version: ans_docker
+    clone: yes
+    force: yes
+
+- name: Clone or update repository for Amazon
+  when: ansible_distribution == 'Amazon'
+  git:
+    repo: https://github.com/Axel7509/Trainee.git
+    dest: home/ec2-user/Trainee
+    version: ans_docker
+    clone: yes
+    force: yes

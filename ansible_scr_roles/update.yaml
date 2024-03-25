@@ -1,0 +1,21 @@
+- name: Update system
+  hosts: all
+  become: true
+  tasks:
+    - name: Output ansible_distribution
+      debug:
+        var: ansible_distribution
+
+    - name: Update pacage
+      block:
+        - name: Update pacage apt (Ubuntu)
+          when: ansible_distribution == 'Ubuntu'
+          apt:
+            upgrade: yes
+            update_cache: yes
+
+        - name: Update pacage yum (Amazon Linux)
+          when: ansible_distribution == 'Amazon'
+          yum:
+            name: "*"
+            state: latest
