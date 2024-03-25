@@ -1,0 +1,22 @@
+- name: Install Docker on Amazon Linux
+  hosts: amazon
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install required system packages
+      yum:
+        name:
+          - docker
+        state: latest
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install Docker Compose v2
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.26.0/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: "0755"
