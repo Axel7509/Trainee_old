@@ -1,0 +1,20 @@
+- name: Build Docker image and create container
+  hosts: ubuntu
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Pull the Docker image nginx
+      docker_image:
+        name: axel76/rel_nginx
+        tag: v10
+        source: pull
+
+    - name: Pull the Docker image apache
+      docker_image:
+        name: axel76/rel_apache
+        tag: v03
+        source: pull
+
+    - name: Run docker-compose up
+      docker_compose:
+        project_src: /var/lib/jenkins/workspace/tets_pipeline/ans-jenkins
