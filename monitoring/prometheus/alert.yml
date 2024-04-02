@@ -1,20 +1,23 @@
 groups:
-  - name: DemoAlerts
+  - name: cpu_alerts
     rules:
       - alert: HighCPUUsage
-        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: "High CPU Usage Detected"
-          description: "CPU usage is above 90% for 1 minute."
-
-      - alert: InstanceDown
-        expr: up == 0
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{job="node-cpu", mode="idle"}[5m])) * 100) > 80
         for: 1m
         labels:
           severity: critical
         annotations:
-          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
-          summary: Instance {{ $labels.instance }} downestart=on-failure
+          summary: "High CPU usage detected on instance1"
+          description: "CPU usage on instance1 has exceeded 80% for more than 1 minutes."
+
+  - name: vm_alerts
+    rules:
+      - alert: HighVMUsage
+        expr: 100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)) > 70
+        labels:
+          job: "remote_node_vm"
+          instance: "remote_node"
+          severity: warning
+        annotations:
+          summary: "High VM usage detected on instance2"
+          description: "VM usage on instance2 has exceeded 70% for more than 1 minutes."

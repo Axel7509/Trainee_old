@@ -6,9 +6,17 @@ scrape_configs:
     static_configs:
       - targets: ["prometheus:9090"]
 
-  - job_name: "node-exporter"
+  - job_name: "node-cpu"
     static_configs:
       - targets: ["node-exporter:9100"]
+        labels:
+          instance: "local_node"
+
+  - job_name: "remote_node_vm"
+    static_configs:
+      - targets: ["54.198.208.140:9100"]
+        labels:
+          instance: "remote_node"
 
 rule_files:
   - alert.yml
