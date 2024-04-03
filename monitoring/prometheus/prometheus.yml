@@ -12,11 +12,11 @@ scrape_configs:
         labels:
           instance: "local_node"
 
-  - job_name: "remote_node_vm"
-    static_configs:
-      - targets: ["54.198.208.140:9100"]
-        labels:
-          instance: "remote_node"
+  # - job_name: "remote_node_vm"
+  #   static_configs:
+  #     - targets: ["54.198.208.140:9100"]
+  #       labels:
+  #         instance: "remote_node"
 
 rule_files:
   - alert.yml

@@ -10,14 +10,14 @@ groups:
           summary: "High CPU usage detected on instance1"
           description: "CPU usage on instance1 has exceeded 80% for more than 1 minutes."
 
-  - name: vm_alerts
-    rules:
-      - alert: HighVMUsage
-        expr: 100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)) > 70
-        labels:
-          job: "remote_node_vm"
-          instance: "remote_node"
-          severity: warning
-        annotations:
-          summary: "High VM usage detected on instance2"
-          description: "VM usage on instance2 has exceeded 70% for more than 1 minutes."
+  # - name: vm_alerts
+  #   rules:
+  #     - alert: HighVMUsage
+  #       expr: 100 * (1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)) > 70
+  #       labels:
+  #         job: "remote_node_vm"
+  #         instance: "remote_node"
+  #         severity: warning
+  #       annotations:
+  #         summary: "High VM usage detected on instance2"
+  #         description: "VM usage on instance2 has exceeded 70% for more than 1 minutes."
