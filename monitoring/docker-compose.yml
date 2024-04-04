@@ -11,22 +11,35 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
+    networks:
+      - monitor
 
   nginx:
-    image: nginx
+    image: axel76/mon-nginx:v02
     ports:
-      - "80:80"
+      - "8085:80"
     volumes:
-     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-     - nginx-logs:/var/log/nginx
+      - nginx-logs:/var/log/nginx
+    networks:
+      - monitor
+
+  apache:
+    image: axel76/mon-apache:v01
+    ports:
+      - "8081:8081"
+    networks:
+      - monitor
 
   promtail:
     image: grafana/promtail:latest
     volumes:
       - nginx-logs:/var/log/nginx
+      - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/containers:/var/lib/docker/containers
       - ./promtail/promtail.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
+    networks:
+      - monitor
 
   loki:
     image: grafana/loki:latest
@@ -37,6 +50,8 @@ services:
       - loki-wal:/wal
       - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
     command: -config.file=/etc/loki/loki-config.yaml
+    networks:
+      - monitor
 
   prometheus:
     image: prom/prometheus
@@ -46,6 +61,8 @@ services:
       - ./prometheus:/etc/prometheus
       - prometheus-data:/prometheus
     command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - monitor
 
   node-exporter:
     image: prom/node-exporter
@@ -60,6 +77,9 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude'
       - '^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)'
+    networks:
+      - monitor
+
 
   alertmanager:
     image: prom/alertmanager
@@ -68,6 +88,8 @@ services:
     volumes:
       - ./alertmanager:/etc/alertmanager
     command: --config.file=/etc/alertmanager/alertmanager.yml
+    networks:
+      - monitor
 
 volumes:
   prometheus-data:
@@ -75,3 +97,10 @@ volumes:
   nginx-logs: {}
   loki-data: {}
   loki-wal: {}
+
+networks:
+  monitor:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
