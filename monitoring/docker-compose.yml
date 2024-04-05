@@ -20,6 +20,9 @@ services:
       - "8085:80"
     volumes:
       - nginx-logs:/var/log/nginx
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogsnginx"
     networks:
       - monitor
 
@@ -27,6 +30,9 @@ services:
     image: axel76/mon-apache:v01
     ports:
       - "8081:8081"
+    labels:
+      logging: "promtail"
+      logging_jobname: "containerlogsapache"
     networks:
       - monitor
 
