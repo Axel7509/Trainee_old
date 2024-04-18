@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app: loki
+    release: loki
+  name: storage-loki-0
+  namespace: monitoring
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/pv/loki
+    type: Directory
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem

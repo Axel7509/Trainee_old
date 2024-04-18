@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app.kubernetes.io/instance: prom
+    app.kubernetes.io/name: grafana
+  name: storage-prom-grafana
+  namespace: monitoring
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/pv/grafana
+    type: Directory
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem

@@ -2,6 +2,7 @@
 FROM nginx:1.21.3
 
 COPY nginx-config.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY index.html /usr/share/nginx/html/
 
 WORKDIR /app
